@@ -1,0 +1,7 @@
+Conecta con Paypal para recibir pagos.<br/>
+Debes tener una cuenta de Paypal.
+<ul>
+<li>Permite generar un enlace único que enviar al cliente para que haga un pago por un importe definido.</li></li>
+<li>Permite enviar enlace de pago junto con los emails de pedidos, presupuestos, albaranes y facturas.</li>
+<li>La página de proceso de pago es pública y puede acceder cualquier persona sin iniciar sesíón en facturascripts, solo teniendo en enlace generado.</li>
+</ul>
