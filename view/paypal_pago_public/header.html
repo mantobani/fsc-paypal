@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es" >
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <title>{if="$fsc->empresa->nombrecorto"}{$fsc->empresa->nombrecorto}{else}{$fsc->empresa->nombre}{/if}</title>
+   <meta name="description" content="FacturaScripts es un software de facturación y contabilidad para pymes. Es software libre bajo licencia GNU/LGPL." />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta name="generator" content="FacturaScripts" />
+   <link rel="shortcut icon" href="{#FS_PATH#}view/img/favicon.ico" />
+   <link rel="stylesheet" href="{#FS_PATH#}view/css/bootstrap-yeti.min.css" />
+   <link rel="stylesheet" href="{#FS_PATH#}view/css/font-awesome.min.css" />
+   <link rel="stylesheet" href="{#FS_PATH#}view/css/custom.css" />
+   <script type="text/javascript" src="{#FS_PATH#}view/js/jquery.min.js"></script>
+   <script type="text/javascript" src="{#FS_PATH#}view/js/bootstrap.min.js"></script>
+   {if="$fsc->mostrarrecaptcha==1 && $fsc->recaptcha_sitio && $fsc->recaptcha_secreta"}
+   <script src='https://www.google.com/recaptcha/api.js'></script>
+   {/if}
+   <script type="text/javascript" src="{$fsc->get_js_location('ac_email_cliente.js')}"></script>
+
+
+   {loop="$fsc->extensions"}
+      {if="$value->type=='head'"}{$value->text}{/if}
+   {/loop}
+</head>
+<body>
+   <nav class="navbar navbar-default">
+      <div class="container-fluid">
+         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.php">
+               <i class="fa fa-home" aria-hidden="true"></i>&nbsp; {$fsc->empresa->nombrecorto}
+            </a>
+         </div>
+      </div>
+   </nav>
+  
+   
+   
