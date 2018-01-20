@@ -1,0 +1,183 @@
+{* 
+ * @author Mayantigo Marrero      mantobani@gmail.com
+ * @copyright 2014-2018, Mayantigo Marrero. All Rights Reserved. 
+ *}
+{include="paypal_pago_public/header"}
+<style>
+    @media screen and (max-width: 400px) {
+        #paypal-button-container {
+            width: 100%;
+        }
+    }
+
+    @media screen and (min-width: 400px) {
+        #paypal-button-container {
+            width: 250pixels;
+        }
+    }
+</style>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+    <script>
+        paypal.Button.render({
+
+            env: '{$fsc->entorno}', // sandbox | production
+
+            // PayPal Client IDs - replace with your own
+            // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+            client: {
+                sandbox:    '{$fsc->sandbox_client_id}',
+                production: '{$fsc->client_id}'
+            },
+
+            // Show the buyer a 'Pay Now' button in the checkout flow
+            commit: true,
+			
+			//estilo
+			style: { 
+				tagline: 'false',
+				size: 'responsive',
+				label: 'checkout',
+				
+			},
+			
+            // payment() is called when the button is clicked
+            payment: function(data, actions) {
+
+                // Make a call to the REST api to create the payment
+                return actions.payment.create({
+                    payment: {
+                        transactions: [
+                            {
+                                amount: { total: '{$fsc->importeformateado}', currency: '{$fsc->doc_coddivisa}' }
+                            }
+                        ]
+                    },
+					experience: {
+						input_fields: {
+							no_shipping: 1
+						}
+					}
+
+                });
+            },
+
+            // onAuthorize() is called when the buyer approves the payment
+            onAuthorize: function(data, actions) {
+
+			
+				var respuestaok =''
+				+'<div class="panel panel-body">'
+				+'<div class="alert alert-success" style="font-size:1.6em;">'
+				+'	<h3><i class="fa fa-check"></i>  Pedido pagado correctamente</h3>'
+				+'</div>'
+				+'<div class="panel panel-default">'
+				+'	<div class="panel-body">'
+				+'		<table class="table table-striped" style="font-size:1.2em;margin:0;">'
+				+'			<tr>'
+				+'				<td>{$fsc->doc_tipo} nยบ</td><td>{$fsc->doc_codigo}</td>'
+				+'			</tr>'
+				+'			<tr>'
+				+'				<td>Total</td><td><b>{$fsc->importeformateado} {$fsc->doc_coddivisa}</b></td>'
+				+'			</tr>'
+				+'		</table>'
+				+'	</div>'
+				+'</div>'
+				+'</div>';
+                // Make a call to the REST api to execute the payment
+                return actions.payment.execute().then(function() {
+					$('#pago, #pago_infos').remove();
+					$('#contenedor').append(respuestaok);
+                });
+            }
+
+		
+        }, '#paypal-button-container');
+
+    </script>
+<div class="container-fluid">
+   <div class="row">
+		  <div class="col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+			<div class="page-header">
+				<h1 class="text-center"><i class="fa fa-paypal"></i> Pago por Paypal</h1>
+			</div>
+			{if="$fsc->tienehash"}
+			<div class="panel panel-default" id="contenedor">
+				<div class="panel-body" id="pago">
+					<table class="table table-striped" style="font-size:1.1em;" >
+						<tr>
+							<td>
+								Nombre:
+							</td>
+							<td>
+								{$fsc->nombre_cliente}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								{$fsc->doc_tipo}
+							</td>
+							<td>
+								{$fsc->doc_codigo}<br>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Total a abonar:
+							</td>
+							<td>
+								<b>{$fsc->importeformateado} {$fsc->doc_coddivisa}</b>
+							</td>
+						</tr>
+					</table>
+					
+					<form id="form_pago" action="{$fsc->tpv_redsys_entorno}" method="POST" class="hidden" >
+						<input type="hidden" name="importe" value="{$fsc->importeformateado}"/>
+					
+					</form>
+					<div id="paypal-button-container"></div>
+					{if="$fsc->entorno=='sandbox'"}
+						<p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Modo SandBox activado (pruebas)</p>
+					{/if}
+				</div>
+			</div>
+			{if="$fsc->txt_info"}
+			<div class="alert alert-info" id="pago_infos"> 
+				<i class="fa fa-info-circle fa-3x pull-left"></i>
+				{$fsc->txt_info}
+			</div>
+			{/if}
+			{/if}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+			{if="$fsc->get_errors()"}
+			<div class="alert alert-danger alert-dismissible hidden-print" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				 <span aria-hidden="true">&times;</span>
+			  </button>
+			  <ul>{loop="$fsc->get_errors()"}<li>{$value}</li>{/loop}</ul>
+			</div>
+			{/if}
+			{if="$fsc->get_messages()"}
+			<div class="alert alert-success alert-dismissible hidden-print" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				 <span aria-hidden="true">&times;</span>
+			  </button>
+			  <ul>{loop="$fsc->get_messages()"}<li>{$value}</li>{/loop}</ul>
+			</div>
+			{/if}
+			{if="$fsc->get_advices()"}
+			<div class="alert alert-info alert-dismissible hidden-print" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				 <span aria-hidden="true">&times;</span>
+			  </button>
+			  <ul>{loop="$fsc->get_advices()"}<li>{$value}</li>{/loop}</ul>
+			</div>
+			{/if}
+		</div>
+   </div>
+</div>
+
+{include="paypal_pago_public/footer"}
