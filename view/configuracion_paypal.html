@@ -1,0 +1,155 @@
+{* 
+ * @author Mayantigo Marrero      mantobani@gmail.com
+ * @copyright 2014-2018, Mayantigo Marrero. All Rights Reserved. 
+ *}
+{include="header"}
+<style>
+/* checkboxes by https://bootsnipp.com/snippets/featured/animated-radios-amp-checkboxes-nojs */
+.checkbox label:after, 
+.radio label:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.checkbox .cr,
+.radio .cr {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #a9a9a9;
+    border-radius: .25em;
+    width: 1.3em;
+    height: 1.3em;
+    float: left;
+    margin-right: .5em;
+}
+
+.radio .cr {
+    border-radius: 50%;
+}
+
+.checkbox .cr .cr-icon,
+.radio .cr .cr-icon {
+    position: absolute;
+    font-size: .8em;
+    line-height: 0;
+    top: 50%;
+    left: 20%;
+}
+
+.radio .cr .cr-icon {
+    margin-left: 0.04em;
+}
+
+.checkbox label input[type="checkbox"],
+.radio label input[type="radio"] {
+    display: none;
+}
+
+.checkbox label input[type="checkbox"] + .cr > .cr-icon,
+.radio label input[type="radio"] + .cr > .cr-icon {
+    transform: scale(3) rotateZ(-20deg);
+    opacity: 0;
+    transition: all .3s ease-in;
+}
+
+.checkbox label input[type="checkbox"]:checked + .cr > .cr-icon,
+.radio label input[type="radio"]:checked + .cr > .cr-icon {
+    transform: scale(1) rotateZ(0deg);
+    opacity: 1;
+}
+
+.checkbox label input[type="checkbox"]:disabled + .cr,
+.radio label input[type="radio"]:disabled + .cr {
+    opacity: .5;
+}
+.radio label, .checkbox label{
+	padding-left:0;
+	font-size:1.3em;
+}
+</style>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="page-header">
+				<h1>
+					<i class="fa fa-paypal"></i> Configuración PayPal
+					<a class="btn btn-xs btn-default" href="{$fsc->url()}" title="Recargar la página">
+						<span class="glyphicon glyphicon-refresh"></span>
+					</a>
+			   </h1>
+			</div>
+		</div>
+	</div>
+<form action="{$fsc->url()}" method="post" class="form">
+	<input type="hidden" name="paypal_setup" value="TRUE"/>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fa fa-cog"></i> Parámetros.
+				</div>
+				<div class="panel-body">
+					<ul class="help-block">
+						<li>Para aceptar pagos por PayPal hay que tener una cuenta "Premier" o "Business"</li>
+						<li>Crea una app en <a href="https://developer.paypal.com/developer/applications/create">developer.paypal.com <i class="fa fa-external-link"></i></a> configúrala a tu gusto y copia aqui los "Client ID" SandBox y Live. El de SandBox para hacer las pruebas de que todo va bien, y el de Live para empezar a cobrar.</li>
+					</ul>
+					<br />
+					<div class="clearfix"></div>
+					<div class="form-group">
+						Cient ID
+						<input type="text" class="form-control" id="client_id" name="client_id" value="{$fsc->paypal_setup['paypal_client_id']}" placeholder="{$fsc->paypal_setup['paypal_client_id']}" />
+					</div>
+					<div class="form-group">
+						Sandbox Client ID
+						<input type="text" class="form-control" id="sandbox_client_id" name="sandbox_client_id" value="{$fsc->paypal_setup['paypal_sandbox_client_id']}" placeholder="{$fsc->paypal_setup['paypal_sandbox_client_id']}" />
+					</div>
+					<div class="form-group checkbox" style="margin-top: 29px;">
+						<label>
+							<input type="hidden" name="sandbox" value="0" />
+							<input type="checkbox" name="sandbox" {if="$fsc->paypal_setup['paypal_sandbox']==1"}value="1" checked{else}value="0"{/if} />
+							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+							Modo Sandbox (pruebas)
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fa fa-envelope"></i> Enlace de pago en emails
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<p class="help-block">
+							Si quieres que tus clientes puedan pagar pedidos, albaranes o facturas, mediante el datáfono, edita la firma de los emails y añade el texto:<br> <b>#ENLACEDEPAGO_PAYPAL#</b><br> Será sustituido por un enlace que conecta con el datáfono virtual y mermite pagar dicha factura.<br>
+						</p>
+						<a class="btn btn-default btn-warning btn-xs" href="{#FS_PATH#}index.php?page=admin_empresa#email"><i class="fa fa-send"></i> Editar firma</a>
+					</div>
+					<div class="form-group">
+						<p class="help-block">Texto a mostrar en vez de #ENLACEDEPAGO_PAYPAL#</p>
+						<input type="text" class="form-control" id="texto_enlace" name="texto_enlace" value="{$fsc->paypal_setup['paypal_texto_enlace']}" placeholder="{$fsc->paypal_setup['paypal_texto_enlace']}" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin-top: 10px;">
+		<div class="col-sm-12 text-right">
+            <br>
+               <button class="btn btn-sm btn-primary" type="submit" onclick="this.disabled=true;this.form.submit();">
+                     <i class="fa fa-save"></i> &nbsp; Guardar
+               </button>
+         </div>
+    </div>
+</form>
+	
+</div>
+<script>
+	$('input[type="checkbox"]').change(function(){
+    this.value = +this.checked;
+	});
+
+</script>
+{include="footer"}
