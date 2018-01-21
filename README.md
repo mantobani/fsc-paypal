@@ -6,7 +6,7 @@ Debes tener una cuenta de Paypal.
 
 Permite generar un enlace único que enviar al cliente para que haga un pago por un importe definido.
 Permite enviar enlace de pago junto con los emails de pedidos, presupuestos, albaranes y facturas.
-La página de proceso de pago es pública y puede acceder cualquier persona sin iniciar sesíón en facturascripts, solo teniendo en enlace generado.
+La página de proceso de pago es pública y puede acceder cualquier persona sin iniciar sesíón en facturascripts, solo teniendo el enlace generado.
 
 # Instalación
 Activa el plugin, e introduce tu cuenta de paypal, donde vas a recibir los pagos.
