@@ -9,26 +9,25 @@ require_once 'extras/phpmailer/class.smtp.php';
 
 class paypal_pago extends fs_controller {
 
-
 	public function __construct()
-    {
-        parent::__construct(__CLASS__, 'Paypal pago', 'admin', FALSE, FALSE, FALSE);
-    }
+    	{
+     		parent::__construct(__CLASS__, 'Paypal pago', 'admin', FALSE, FALSE, FALSE);
+    	}
 	
-	protected function private_core(){
+ 	protected function private_core(){
 		
 		parent::private_core();
 		$this->template = 'paypal_pago';
 		$this->generarpago();
 	}
 	
-    protected function public_core() {
+    	protected function public_core() {
         
 		parent::public_core();
 		$this->template = 'paypal_pago';
 		$this->generarpago();
 
-    }
+    	}	
 	
 	protected function my_decrypt($data, $key) {
 		// Remove the base64 encoding from our key
@@ -41,21 +40,15 @@ class paypal_pago extends fs_controller {
 	public function generarpago(){
 
 		$fsvar = new fs_var();
-        $sandbox = $fsvar->simple_get('paypal_sandbox');
+        	$sandbox = $fsvar->simple_get('paypal_sandbox');
 		if ($sandbox){
 			$this->entorno = 'sandbox';
 		} else {
 			$this->entorno = 'production';
 		}
 		$this->client_id = $fsvar->simple_get('paypal_client_id');
-        $this->sandbox_client_id = $fsvar->simple_get('paypal_sandbox_client_id');
-        $this->mostrartlf = $fsvar->simple_get('paypal_mostrartlf');
-        $this->tlfmostrado = $fsvar->simple_get('paypal_tlfmostrado');
-        $this->mostrarform = $fsvar->simple_get('paypal_mostrarform');
+        	$this->sandbox_client_id = $fsvar->simple_get('paypal_sandbox_client_id');
 		$this->txt_info = nl2br( $fsvar->simple_get('paypal_txt_info'));
-        $this->mostrarrecaptcha = $fsvar->simple_get('paypal_mostrarrecaptcha');
-        $this->recaptcha_secreta = $fsvar->simple_get('paypal_recaptcha_secreta');
-        $this->recaptcha_sitio = $fsvar->simple_get('paypal_recaptcha_sitio');
 		$encryption_key = $fsvar->simple_get('paypal_encryption_key');
 		
 		//recogemos el hash de la url y lo decodificamos
@@ -87,10 +80,9 @@ class paypal_pago extends fs_controller {
 	}
 	
 	public function new_error_msg($msg = FALSE, $tipo = 'paypal_pago', $alerta = FALSE, $guardar = TRUE)
-    {
-        parent::new_error_msg($msg, $tipo, $alerta, $guardar);
-
-        return $msg . '<br/>';
-    }
+ 	{
+        	parent::new_error_msg($msg, $tipo, $alerta, $guardar);
+	       	return $msg . '<br/>';
+    	}
 	
 }
