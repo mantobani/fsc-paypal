@@ -68,7 +68,7 @@ if (!function_exists('plantilla_email')) {
 		$parameters_encrypted = my_encrypt($parameters, $fsvar->simple_get('paypal_encryption_key'));
 		
 		$texto_enlace = $fsvar->simple_get('paypal_texto_enlace');
-		$base_url = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https' : 'http' ) . '://' .  $_SERVER['HTTP_HOST'];
+		$base_url = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https' : 'http' ) . '://' .  $_SERVER['HTTP_HOST'] .  rtrim(dirname($_SERVER['SCRIPT_NAME']),'/' );
 		$enlace_pago_paypal = '<a href="'. $base_url .'/index.php?page=paypal_pago&data='. $parameters_encrypted .'">'. $texto_enlace .'</a>';
 		
 		
