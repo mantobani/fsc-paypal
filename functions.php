@@ -71,19 +71,37 @@ if (!function_exists('plantilla_email')) {
 		$base_url = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https' : 'http' ) . '://' .  $_SERVER['HTTP_HOST'] .  rtrim(dirname($_SERVER['SCRIPT_NAME']),'/' );
 		$enlace_pago_paypal = '<a href="'. $base_url .'/index.php?page=paypal_pago&data='. $parameters_encrypted .'">'. $texto_enlace .'</a>';
 		
-		
-		// Juntamos todo y lo metemos en la firma
-		$shortcode =  array (
-			'#DOCUMENTO#', 
-			'#ENLACEDEPAGO_PAYPAL#',
-			'#FIRMA#'
-			);
-		$parsedcode = array ( 
-			$documento,
-			$enlace_pago_paypal,
-			$firma
-			);
+		if (empty($fsvar->simple_get('tpv_redsys_encryption_key'))){
+			// Juntamos todo y lo metemos en la firma
+			$shortcode =  array (
+				'#DOCUMENTO#', 
+				'#ENLACEDEPAGO_PAYPAL#',
+				'#FIRMA#'
+				);
+			$parsedcode = array ( 
+				$documento,
+				$enlace_pago_paypal,
+				$firma
+				);
+		} else {
+			$parameters_redsys = $documento_data->total .'|'. $documento_orig .'|'. $documento_data->nombrecliente . '|'. ucwords($tipo);
+			$parameters_enc_redsys = my_encrypt($parameters_redsys, $fsvar->simple_get('tpv_redsys_encryption_key'));
+			$texto_enlace_redsys = $fsvar->simple_get('tpv_redsys_texto_enlace');
+			$enlace_pago_redsys = '<a href="'. $base_url .'/index.php?page=redsys_pago&data='. $parameters_enc_redsys .'">'. $texto_enlace_redsys .'</a>';
 			
+			$shortcode =  array (
+				'#DOCUMENTO#', 
+				'#ENLACEDEPAGO_PAYPAL#',
+				'#ENLACEDEPAGO_REDSYS#',
+				'#FIRMA#'
+				);
+			$parsedcode = array ( 
+				$documento,
+				$enlace_pago_paypal,
+				$enlace_pago_redsys,
+				$firma
+				);
+		}
 		
         $firma_final = str_replace($shortcode, $parsedcode, $plantillas['mail_' . $tipo]);
 		return print_r( $firma_final,true );
